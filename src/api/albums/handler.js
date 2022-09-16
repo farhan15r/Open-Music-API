@@ -1,4 +1,4 @@
-const ClientError = require("../../exceptions/ClientError");
+const ClientError = require('../../exceptions/ClientError');
 
 class AlbumsHandler {
   constructor(service, validator) {
@@ -19,8 +19,8 @@ class AlbumsHandler {
       const albumId = await this._service.addAlbum({ name, year });
 
       const response = h.response({
-        status: "success",
-        message: "Album berhasil ditambahkan",
+        status: 'success',
+        message: 'Album berhasil ditambahkan',
         data: {
           albumId,
         },
@@ -30,7 +30,7 @@ class AlbumsHandler {
       return response;
     } catch (error) {
       const response = h.response({
-        status: "fail",
+        status: 'fail',
         message: error.message,
       });
       response.code(error.statusCode);
@@ -44,7 +44,7 @@ class AlbumsHandler {
       const album = await this._service.getAlbumById(id);
 
       return {
-        status: "success",
+        status: 'success',
         data: {
           album,
         },
@@ -52,7 +52,7 @@ class AlbumsHandler {
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
-          status: "fail",
+          status: 'fail',
           message: error.message,
         });
         response.code(error.statusCode);
@@ -62,8 +62,8 @@ class AlbumsHandler {
 
       // Server ERROR!
       const response = h.response({
-        status: "error",
-        message: "Maaf, terjadi kegagalan pada server kami.",
+        status: 'error',
+        message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
       console.error(error);
@@ -80,13 +80,13 @@ class AlbumsHandler {
       await this._service.editAlbumById(id, request.payload);
 
       return {
-        status: "success",
-        message: "Album berhasil diperbarui",
+        status: 'success',
+        message: 'Album berhasil diperbarui',
       };
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
-          status: "fail",
+          status: 'fail',
           message: error.message,
         });
         response.code(error.statusCode);
@@ -95,8 +95,8 @@ class AlbumsHandler {
 
       // Server ERROR!
       const response = h.response({
-        status: "error",
-        message: "Maaf, terjadi kegagalan pada server kami.",
+        status: 'error',
+        message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
       console.error(error);
@@ -110,13 +110,13 @@ class AlbumsHandler {
       await this._service.deleteAlbumById(id);
 
       return {
-        status: "success",
-        message: "Album berhasil dihapus",
+        status: 'success',
+        message: 'Album berhasil dihapus',
       };
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
-          status: "fail",
+          status: 'fail',
           message: error.message,
         });
         response.code(error.statusCode);
@@ -125,8 +125,8 @@ class AlbumsHandler {
 
       // Server ERROR!
       const response = h.response({
-        status: "error",
-        message: "Maaf, terjadi kegagalan pada server kami.",
+        status: 'error',
+        message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
       console.error(error);
