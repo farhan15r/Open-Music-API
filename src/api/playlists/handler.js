@@ -42,6 +42,27 @@ class PlaylistsHandler {
       },
     };
   }
+
+  async postSongToPlaylistIdHandler(request, h) {
+    const { id: credentialId } = request.auth.credentials; // mendapatkan id yang sudah ter otentikasi
+    const { playlistId } = request.params;
+
+    await this._service.verifyPlaylistOwner(playlistId, credentialId);
+
+    const { songId } = request.payload;
+    const id = await this._service.addSongToPlaylist(playlistId, songId);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Song berhasil ditambahkan ke Playlist',
+      data: {
+        id,
+      },
+    });
+    response.code(201);
+
+    return response;
+  }
 }
 
 module.exports = PlaylistsHandler;
