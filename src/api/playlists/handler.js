@@ -68,7 +68,7 @@ class PlaylistsHandler {
     return response;
   }
 
-  async getSongsPlaylistIdHandler(request, h) {
+  async getSongsPlaylistIdHandler(request) {
     const { id: credentialId } = request.auth.credentials; // mendapatkan id yang sudah ter otentikasi
     const { playlistId } = request.params;
 
@@ -81,6 +81,24 @@ class PlaylistsHandler {
       data: {
         playlist,
       },
+    };
+  }
+
+  async deleteSongFromPlaylistIdHandler(request, h) {
+    this._validator.validateSongPlaylistPayload(request.payload);
+
+    const { id: credentialId } = request.auth.credentials; // mendapatkan id yang sudah ter otentikasi
+    const { playlistId } = request.params;
+
+    await this._service.verifyPlaylistOwner(playlistId, credentialId);
+
+    const { songId } = request.payload;
+
+    await this._service.deleteSongFromPlaylist(playlistId, songId);
+
+    return {
+      status: 'success',
+      message: 'Lagu berhasil dihapus dari Playlist',
     };
   }
 }
