@@ -35,7 +35,7 @@ class PlaylistsService {
     return result.rows;
   }
 
-  async addSongToPlaylist(playlistId, songId) {
+  async addSongToPlaylist(playlistId, songId, userId) {
     const id = `playlist-songs-${nanoid(16)}`;
 
     const query = {
@@ -44,6 +44,15 @@ class PlaylistsService {
     };
 
     const result = await this._pool.query(query);
+
+    const idActvy = `playlist-activity-${nanoid(16)}`;
+    const time = new Date().toISOString();
+    const queryActivity = {
+      text: 'INSERT INTO playlist_song_activities VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      values: [idActvy, playlistId, songId, userId, 'add', time],
+    };
+
+    await this._pool.query(queryActivity);
 
     if (!result.rows[0].id) {
       throw new InvariantError('Song gagal ditambahkan ke Playlist');
@@ -80,7 +89,7 @@ class PlaylistsService {
     return result.rows[0];
   }
 
-  async deleteSongFromPlaylist(playlistId, songId) {
+  async deleteSongFromPlaylist(playlistId, songId, userId) {
     const query = {
       text: 'DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING id',
       values: [playlistId, songId],
@@ -93,6 +102,53 @@ class PlaylistsService {
         'Song gagal dihapus. song tidak ditemukan di playlist'
       );
     }
+
+    const idActvy = `playlist-activity-${nanoid(16)}`;
+    const time = new Date().toISOString();
+    const queryActivity = {
+      text: 'INSERT INTO playlist_song_activities VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      values: [idActvy, playlistId, songId, userId, 'delete', time],
+    };
+
+    await this._pool.query(queryActivity);
+  }
+
+  async deletePlaylist(playlistId) {
+    const query = {
+      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id',
+      values: [playlistId],
+    };
+
+    // const result =
+    await this._pool.query(query);
+
+    const queryDeleteActivities = {
+      text: 'DELETE FROM playlist_song_activities WHERE playlist_id = $1 RETURNING id',
+      values: [playlistId],
+    };
+
+    await this._pool.query(queryDeleteActivities);
+
+    // playlist sudah pasti ada, karena sudah di cek saat verifyPlaylistOwner
+    // if (!result.rows.length) {
+    //   throw new NotFoundError(
+    //     'Playlist gagal dihapus. Playlist tidak ditemukan di playlist'
+    //   );
+    // }
+  }
+
+  async getPlaylistActivities(playlistId) {
+    const query = {
+      text: `SELECT playlist_song_activities.id, users.username, songs.title, playlist_song_activities.action, playlist_song_activities.time FROM playlist_song_activities 
+      JOIN users ON users.id = playlist_song_activities.user_id
+      JOIN songs ON songs.id = playlist_song_activities.song_id
+      WHERE playlist_song_activities.playlist_id = $1`,
+      values: [playlistId],
+    };
+
+    const results = await this._pool.query(query);
+
+    return results.rows;
   }
 
   async verifyPlaylistOwner(playlistId, owner) {
