@@ -44,12 +44,16 @@ class PlaylistsHandler {
   }
 
   async postSongToPlaylistIdHandler(request, h) {
+    this._validator.validateSongPlaylistPayload(request.payload);
+
     const { id: credentialId } = request.auth.credentials; // mendapatkan id yang sudah ter otentikasi
     const { playlistId } = request.params;
 
     await this._service.verifyPlaylistOwner(playlistId, credentialId);
 
     const { songId } = request.payload;
+    await this._service.searchSongById(songId);
+
     const id = await this._service.addSongToPlaylist(playlistId, songId);
 
     const response = h.response({
