@@ -3,11 +3,13 @@ const { Pool } = require('pg');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
 class PlaylistSongsService {
-  constructor() {
+  constructor(songsService) {
     this._pool = new Pool();
+    this._songsService = songsService;
   }
 
-  async addSongToPlaylist(playlistId, songId, userId) {
+  async addSongToPlaylist(playlistId, songId) {
+    await this._songsService.getSongById(songId);
     const id = `playlist-songs-${nanoid(16)}`;
 
     const query = {

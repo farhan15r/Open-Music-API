@@ -59,12 +59,10 @@ class PlaylistsHandler {
     await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     const { songId } = request.payload;
-    await this._playlistsService.searchSongById(songId);
 
     const id = await this._playlistSongsService.addSongToPlaylist(
       playlistId,
-      songId,
-      credentialId
+      songId
     );
 
     await this._playlistActivitiesService.addPlaylistActivies(
