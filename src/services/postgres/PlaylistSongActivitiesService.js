@@ -14,7 +14,11 @@ class PlaylistSongActivities {
       values: [id, playlistId, songId, userId, action, time],
     };
 
-    await this._pool.query(query);
+    const result = await this._pool.query(query);
+
+    if (!result.rows[0].id) {
+      throw new InvariantError('Playlist Activity gagal ditambahkan');
+    }
   }
 
   async deletePlaylistActivities(playlistId) {

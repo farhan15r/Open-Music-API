@@ -28,9 +28,6 @@ class PlaylistsService {
 
   async getPlaylists(userId) {
     const query = {
-      // text: 'SELECT id, name, owner as username FROM playlists WHERE owner = $1',
-      // values: [owner],
-
       text: `SELECT playlists.id, playlists.name, users.username FROM playlists
       JOIN users ON users.id = playlists.owner
       LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id
@@ -39,12 +36,8 @@ class PlaylistsService {
       values: [userId],
     };
 
-    try {
-      const result = await this._pool.query(query);
-      return result.rows;
-    } catch (error) {
-      console.error(error);
-    }
+    const result = await this._pool.query(query);
+    return result.rows;
   }
 
   async deletePlaylist(playlistId) {
@@ -53,15 +46,7 @@ class PlaylistsService {
       values: [playlistId],
     };
 
-    // const result =
     await this._pool.query(query);
-
-    // playlist sudah pasti ada, karena sudah di cek saat verifyPlaylistOwner
-    // if (!result.rows.length) {
-    //   throw new NotFoundError(
-    //     'Playlist gagal dihapus. Playlist tidak ditemukan di playlist'
-    //   );
-    // }
   }
 
   async getPlaylistActivities(playlistId) {
