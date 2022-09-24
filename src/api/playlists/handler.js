@@ -56,7 +56,7 @@ class PlaylistsHandler {
     const { id: credentialId } = request.auth.credentials; // mendapatkan id yang sudah ter otentikasi
     const { playlistId } = request.params;
 
-    await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
+    await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     const { songId } = request.payload;
     await this._playlistsService.searchSongById(songId);
@@ -90,7 +90,7 @@ class PlaylistsHandler {
     const { id: credentialId } = request.auth.credentials; // mendapatkan id yang sudah ter otentikasi
     const { playlistId } = request.params;
 
-    await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
+    await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     const playlist = await this._playlistSongsService.getSongsPlaylist(
       playlistId
@@ -110,7 +110,7 @@ class PlaylistsHandler {
     const { id: credentialId } = request.auth.credentials; // mendapatkan id yang sudah ter otentikasi
     const { playlistId } = request.params;
 
-    await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
+    await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     const { songId } = request.payload;
 
