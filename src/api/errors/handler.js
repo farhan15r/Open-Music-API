@@ -1,7 +1,7 @@
 const ClientError = require('../../exceptions/ClientError');
 
 class ErrorsHandler {
-  errorHandler = (request, h) => {
+  errorHandler(request, h) {
     const { response } = request;
     if (response instanceof ClientError) {
       // membuat response baru dari response toolkit sesuai kebutuhan error handling
@@ -14,7 +14,7 @@ class ErrorsHandler {
     }
     // jika bukan ClientError, lanjutkan dengan response sebelumnya (tanpa terintervensi)
     return response.continue || response;
-  };
+  }
 }
 
 module.exports = ErrorsHandler;

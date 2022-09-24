@@ -1,3 +1,4 @@
+const InvariantError = require('../../exceptions/InvariantError');
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
 const NotFoundError = require('../../exceptions/NotFoundError');
@@ -54,7 +55,7 @@ class PlaylistSongsService {
     return result.rows[0];
   }
 
-  async deleteSongFromPlaylist(playlistId, songId, userId) {
+  async deleteSongFromPlaylist(playlistId, songId) {
     const query = {
       text: 'DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING id',
       values: [playlistId, songId],

@@ -1,4 +1,3 @@
-const ClientError = require('../../exceptions/ClientError');
 const autoBind = require('auto-bind');
 
 class CollaborationsHandler {
@@ -36,7 +35,7 @@ class CollaborationsHandler {
     return response;
   }
 
-  async deleteCollaborationHandler(request, h) {
+  async deleteCollaborationHandler(request) {
     this._validator.validateCollaborationPayload(request.payload);
     const { id: credentialId } = request.auth.credentials;
     const { playlistId, userId } = request.payload;

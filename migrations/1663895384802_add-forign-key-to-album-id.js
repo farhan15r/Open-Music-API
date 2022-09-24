@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 exports.up = (pgm) => {
   // memberikan constraint foreign key pada album_id terhadap kolom id dari tabel albums
   pgm.addConstraint(

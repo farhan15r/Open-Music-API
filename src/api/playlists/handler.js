@@ -112,11 +112,7 @@ class PlaylistsHandler {
 
     const { songId } = request.payload;
 
-    await this._playlistSongsService.deleteSongFromPlaylist(
-      playlistId,
-      songId,
-      credentialId
-    );
+    await this._playlistSongsService.deleteSongFromPlaylist(playlistId, songId);
 
     await this._playlistActivitiesService.addPlaylistActivies(
       playlistId,
