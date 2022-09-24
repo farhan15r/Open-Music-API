@@ -8,10 +8,10 @@ class SongsHandler {
     autoBind(this);
   }
 
-  async postSongHandler(request, h) {
-    this._validator.validateSongPayload(request.payload);
+  async postSongHandler({ payload }, h) {
+    this._validator.validateSongPayload(payload);
 
-    const songId = await this._service.addSong(request.payload);
+    const songId = await this._service.addSong(payload);
 
     const response = h.response({
       status: 'success',
@@ -25,8 +25,8 @@ class SongsHandler {
     return response;
   }
 
-  async getSongsHandler(request) {
-    const songs = await this._service.getSongs(request);
+  async getSongsHandler({ query }) {
+    const songs = await this._service.getSongs(query);
 
     return {
       status: 'success',
@@ -48,11 +48,11 @@ class SongsHandler {
     };
   }
 
-  async putSongByIdHandler(request) {
-    this._validator.validateSongPayload(request.payload);
-    const { id } = request.params;
+  async putSongByIdHandler({ payload, params }) {
+    this._validator.validateSongPayload(payload);
+    const { id } = params;
 
-    await this._service.editSongById(id, request.payload);
+    await this._service.editSongById(id, payload);
 
     return {
       status: 'success',
@@ -60,8 +60,8 @@ class SongsHandler {
     };
   }
 
-  async deleteSongByIdHandler(request) {
-    const { id } = request.params;
+  async deleteSongByIdHandler({ params }) {
+    const { id } = params;
     await this._service.deleteSongById(id);
 
     return {

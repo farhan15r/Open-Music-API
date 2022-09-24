@@ -9,11 +9,11 @@ class CollaborationsHandler {
     autoBind(this);
   }
 
-  async postCollaborationHandler(request, h) {
-    this._validator.validateCollaborationPayload(request.payload);
+  async postCollaborationHandler({ payload, auth }, h) {
+    this._validator.validateCollaborationPayload(payload);
 
-    const { id: credentialId } = request.auth.credentials; // mendapatkan id dr auth
-    const { playlistId, userId } = request.payload;
+    const { id: credentialId } = auth.credentials; // mendapatkan id dr auth
+    const { playlistId, userId } = payload;
 
     await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId); // memferifikasi id owner dengan playlist
 
@@ -35,10 +35,10 @@ class CollaborationsHandler {
     return response;
   }
 
-  async deleteCollaborationHandler(request) {
-    this._validator.validateCollaborationPayload(request.payload);
-    const { id: credentialId } = request.auth.credentials;
-    const { playlistId, userId } = request.payload;
+  async deleteCollaborationHandler({ payload, auth }) {
+    this._validator.validateCollaborationPayload(payload);
+    const { id: credentialId } = auth.credentials;
+    const { playlistId, userId } = payload;
 
     await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
     await this._collaborationsService.deleteCollaboration(playlistId, userId);

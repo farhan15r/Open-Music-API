@@ -68,7 +68,7 @@ class PlaylistsService {
 
   async verifyPlaylistOwner(playlistId, owner) {
     const query = {
-      text: 'SELECT * FROM playlists WHERE id = $1',
+      text: 'SELECT owner FROM playlists WHERE id = $1',
       values: [playlistId],
     };
 
