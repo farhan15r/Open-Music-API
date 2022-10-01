@@ -2,7 +2,7 @@ const AlbumsHandler = require('./handler');
 const routes = require('./routes');
 
 module.exports = {
-  name: 'albums',
+  name: 'albumLikes',
   version: '1.0.0',
 
   register: async (server, { service, validator }) => {
