@@ -8,31 +8,6 @@ class SongsService {
     this._pool = new Pool();
   }
 
-  requestQuery(request) {
-    const query = {};
-
-    if (Object.keys(request.query).length !== 0) {
-      const { title, performer } = request.query;
-      if (title && performer) {
-        query.text =
-          'SELECT id, title, performer FROM songs WHERE UPPER(title) LIKE UPPER($1) AND UPPER(performer) LIKE UPPER($2)';
-        query.values = ['%' + title + '%', '%' + performer + '%'];
-      } else if (title) {
-        query.text =
-          'SELECT id, title, performer FROM songs WHERE UPPER(title) LIKE UPPER($1)';
-        query.values = ['%' + title + '%'];
-      } else if (performer) {
-        query.text =
-          'SELECT id, title, performer FROM songs WHERE UPPER(performer) LIKE UPPER($1)';
-        query.values = ['%' + performer + '%'];
-      }
-    } else {
-      query.text = 'SELECT id, title, performer FROM songs';
-    }
-
-    return query;
-  }
-
   async addSong({ title, year, genre, performer, duration, albumId }) {
     const id = 'song-' + nanoid(10);
     const createdAt = new Date().toISOString();
