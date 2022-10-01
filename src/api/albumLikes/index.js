@@ -5,8 +5,12 @@ module.exports = {
   name: 'albums',
   version: '1.0.0',
 
-  register: async (server, { service, validator }) => {
-    const albumLikesHandler = new AlbumLikesHandler(service, validator);
+  register: async (server, { service, cacheService, validator }) => {
+    const albumLikesHandler = new AlbumLikesHandler(
+      service,
+      cacheService,
+      validator
+    );
     server.route(routes(albumLikesHandler));
   },
 };
